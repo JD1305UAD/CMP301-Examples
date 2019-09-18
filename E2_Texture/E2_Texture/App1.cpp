@@ -5,7 +5,8 @@
 App1::App1()
 {
 	mesh = nullptr;
-	textureShader = nullptr;
+	textureShader0 = nullptr;
+	textureShader1 = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in, bool VSYNC, bool FULL_SCREEN)
@@ -13,12 +14,13 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Call super/parent init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in, VSYNC, FULL_SCREEN);
 
-	textureMgr->loadTexture(L"brick", L"res/brick1.dds");
+	textureMgr->loadTexture(L"ball", L"res/soccerBall.png");
+	textureMgr->loadTexture(L"wood", L"res/wood.png");
 
 	// Create Mesh object and shader object
 	mesh = new TexturedQuad(renderer->getDevice(), renderer->getDeviceContext());
-	textureShader = new TextureShader(renderer->getDevice(), hwnd);
-
+	textureShader0 = new TextureShader(renderer->getDevice(), hwnd);
+	textureShader1 = new TextureShader(renderer->getDevice(), hwnd);
 }
 
 
@@ -34,10 +36,15 @@ App1::~App1()
 		mesh = 0;
 	}
 
-	if (textureShader)
+	if (textureShader0)
 	{
-		delete textureShader;
-		textureShader = 0;
+		delete textureShader0;
+		textureShader0 = 0;
+	}
+	if (textureShader1)
+	{
+		delete textureShader1;
+		textureShader1 = 0;
 	}
 }
 
@@ -79,8 +86,10 @@ bool App1::render()
 
 	// Send geometry data, set shader parameters, render object with shader
 	mesh->sendData(renderer->getDeviceContext());
-	textureShader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"brick"));
-	textureShader->render(renderer->getDeviceContext(), mesh->getIndexCount());
+	textureShader0->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"ball"));
+	textureShader1->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"wood"));
+	textureShader0->render(renderer->getDeviceContext(), mesh->getIndexCount());
+	textureShader1->render(renderer->getDeviceContext(), mesh->getIndexCount());
 
 	// Render GUI
 	gui();

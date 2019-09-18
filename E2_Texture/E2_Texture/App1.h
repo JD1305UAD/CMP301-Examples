@@ -22,7 +22,8 @@ protected:
 	void gui();
 
 private:
-	TextureShader* textureShader;
+	TextureShader* textureShader0;
+	TextureShader* textureShader1;
 	TexturedQuad* mesh;
 };
 
