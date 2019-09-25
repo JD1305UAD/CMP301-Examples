@@ -16,12 +16,13 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	textureMgr->loadTexture(L"brick", L"res/brick1.dds");
 
 	// Create Mesh object and shader object
-	mesh = new SphereMesh(renderer->getDevice(), renderer->getDeviceContext());
+	mesh = new PlaneMesh(renderer->getDevice(), renderer->getDeviceContext());
 	shader = new LightShader(renderer->getDevice(), hwnd);
 	light = new Light;
-	light->setDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
-	light->setDirection(1.0f, 0.0f, 0.0f);
-
+	//light->setDiffuseColour(0.0f, 0.0f, 0.0f, 1.0f);
+	light->setDiffuseColour(1.0f, 0.0f, 0.0f, 1.0f);
+	light->setDirection(0.0f, 1.0f, 0.0f);
+	light->setAmbientColour(0.05f, 0.05f, 0.05f, 1.0f);
 }
 
 
