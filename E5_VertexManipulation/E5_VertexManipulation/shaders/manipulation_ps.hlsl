@@ -4,6 +4,7 @@
 Texture2D texture0 : register(t0);
 SamplerState sampler0 : register(s0);
 
+
 cbuffer LightBuffer : register(b0)
 {
 	float4 diffuseColour;
@@ -17,6 +18,8 @@ struct InputType
 	float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
 };
+
+
 
 // Calculate lighting intensity based on direction and normal. Combine with light colour.
 float4 calculateLighting(float3 lightDirection, float3 normal, float4 diffuse)

@@ -21,9 +21,22 @@ struct OutputType
 	float3 normal : NORMAL;
 };
 
+struct timeType
+{
+	float timer;
+	float3 padding;
+};
+
 OutputType main(InputType input)
 {
 	OutputType output;
+
+	//offset position based on sine wave
+	input.position.y= sin(input.position.x+ time);
+	
+	//modify normals
+	input.normal.x= 1 -cos(input.position.x+ time);
+	input.normal.y= abs(cos(input.position.x+ time)); 
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
 	output.position = mul(input.position, worldMatrix);
