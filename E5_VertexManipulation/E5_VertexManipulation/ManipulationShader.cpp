@@ -42,6 +42,14 @@ ManipulationShader::~ManipulationShader()
 		timeBuffer->Release();
 		timeBuffer = 0;
 	}
+	
+	//Release the sine buffer.
+	if (sineBuffer)
+	{
+		sineBuffer->Release();
+		sineBuffer = 0;
+	}
+
 	//Release base shader components
 	BaseShader::~BaseShader();
 }
@@ -52,6 +60,7 @@ void ManipulationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
 	D3D11_BUFFER_DESC timeBufferDesc;
+	D3D11_BUFFER_DESC sineBufferDesc;
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
@@ -97,10 +106,20 @@ void ManipulationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 	timeBufferDesc.MiscFlags = 0;
 	timeBufferDesc.StructureByteStride = 0;
 	renderer->CreateBuffer(&timeBufferDesc, NULL, &timeBuffer);
+
+	////setup sine buffer
+	//sineBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	//sineBufferDesc.ByteWidth = sizeof(SineBufferType);
+	//sineBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	//sineBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	//sineBufferDesc.MiscFlags = 0;
+	//sineBufferDesc.StructureByteStride = 0;
+	//renderer->CreateBuffer(&sineBufferDesc, NULL, &sineBuffer);
+
 }
 
 
-void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, Timer* timer)
+void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, float timer)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -136,10 +155,26 @@ void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	//Send time data to shader
 	TimeBufferType* timePtr;
 	deviceContext->Map(timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	timePtr->time = timer->getTime();
-	timePtr->padding = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	timePtr = (TimeBufferType*)mappedResource.pData;
+	float timeTracked = timer;
+	timePtr->time = timeTracked;
+	timePtr->amplitude = 2.f;
+	timePtr->frequency = 10.f;
+	timePtr->speed = 2.f;
+	//timePtr->padding = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	deviceContext->Unmap(timeBuffer, 0);
-	deviceContext->PSSetConstantBuffers(0, 1, &timeBuffer);
+	deviceContext->VSSetConstantBuffers(1, 1, &timeBuffer);
+
+	////Send time data to shader
+	//SineBufferType* sinePtr;
+	//deviceContext->Map(timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//sinePtr = (SineBufferType*)mappedResource.pData;
+	//sinePtr->amplitude = 2.f;
+	//sinePtr->frequency = 60.f;
+	//sinePtr->speed = 2.f;
+	//sinePtr->padding = 0.0f;
+	//deviceContext->Unmap(sineBuffer, 0);
+	//deviceContext->VSSetConstantBuffers(2, 1, &sineBuffer);
 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
