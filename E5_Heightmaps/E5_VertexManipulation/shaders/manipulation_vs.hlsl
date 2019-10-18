@@ -1,5 +1,9 @@
 // Light vertex shader
 // Standard issue vertex shader, apply matrices, pass info to pixel shader
+
+Texture2D texture1 : register(t0);
+SamplerState heightSampler : register(s0);
+
 cbuffer MatrixBuffer : register(b0)
 {
 	matrix worldMatrix;
@@ -41,23 +45,27 @@ OutputType main(InputType input)
 {
 	OutputType output;
 
-	float twopi = 6.28f;
-	float k = twopi / frequency;
+	float4 offset = texture1.SampleLevel(heightSampler, input.tex, 0);
+
+	input.position.y = offset.xz * 20;
+
+	//float twopi = 6.28f;
+	//float k = twopi / frequency;
 
 	//offset position based on sine wave
 	//input.position.y= sin(input.position.x + timer);
 	
-	//offset position based on sine wave
-	input.position.y = sin(input.position.x + (timer * speed));
-	input.position.y *= amplitude;
+	////offset position based on sine wave
+	//input.position.y = sin(input.position.x + (timer * speed));
+	//input.position.y *= amplitude;
 
-	input.position.x *= frequency;
+	//input.position.x *= frequency;
 
-	//input.position.z = -cos(timer);
+	////input.position.z = -cos(timer);
 
-	//modify normals
-	input.normal.x = (1 - cos(input.position.x + (timer * speed)));
-	input.normal.y = abs(cos(input.position.x + (timer * speed)));
+	////modify normals
+	//input.normal.x = (1 - cos(input.position.x + (timer * speed)));
+	//input.normal.y = abs(cos(input.position.x + (timer * speed)));
 
 	//modify normals
 	//input.normal.x = amplitude -cos(speed * input.position.x + timer);
