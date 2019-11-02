@@ -47,7 +47,7 @@ OutputType main(InputType input)
 
 	float4 offset = texture1.SampleLevel(heightSampler, input.tex, 0);
 
-	input.position.y = offset.xz * 20;
+	input.position.y = offset.xz * 15;
 
 	//float twopi = 6.28f;
 	//float k = twopi / frequency;

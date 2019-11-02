@@ -44,10 +44,10 @@ ManipulationShader::~ManipulationShader()
 	}
 	
 	//Release the sine buffer.
-	if (sineBuffer)
+	if (waveBuffer)
 	{
-		sineBuffer->Release();
-		sineBuffer = 0;
+		waveBuffer->Release();
+		waveBuffer = 0;
 	}
 
 	//Release base shader components
@@ -60,7 +60,7 @@ void ManipulationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
 	D3D11_BUFFER_DESC timeBufferDesc;
-	D3D11_BUFFER_DESC sineBufferDesc;
+	D3D11_BUFFER_DESC waveBufferDesc;
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
@@ -107,19 +107,19 @@ void ManipulationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 	timeBufferDesc.StructureByteStride = 0;
 	renderer->CreateBuffer(&timeBufferDesc, NULL, &timeBuffer);
 
-	////setup sine buffer
-	//sineBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	//sineBufferDesc.ByteWidth = sizeof(SineBufferType);
-	//sineBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//sineBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//sineBufferDesc.MiscFlags = 0;
-	//sineBufferDesc.StructureByteStride = 0;
-	//renderer->CreateBuffer(&sineBufferDesc, NULL, &sineBuffer);
+	//setup wave buffer
+	waveBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	waveBufferDesc.ByteWidth = sizeof(WaveBufferType);
+	waveBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	waveBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	waveBufferDesc.MiscFlags = 0;
+	waveBufferDesc.StructureByteStride = 0;
+	renderer->CreateBuffer(&waveBufferDesc, NULL, &waveBuffer);
 
 }
 
 
-void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, float timer, float ampli, float freq, float spe)
+void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, Light* light, float timer, XMFLOAT4 _wave1, XMFLOAT4 _wave2, XMFLOAT4 _wave3, float spe)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -148,7 +148,8 @@ void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	lightPtr->ambient = light->getAmbientColour();
 	lightPtr->diffuse = light->getDiffuseColour();
 	lightPtr->direction = light->getDirection();
-	lightPtr->padding = 0.0f;
+	lightPtr->specularColour = light->getSpecularColour();
+	lightPtr->specularPower = light->getSpecularPower();
 	deviceContext->Unmap(lightBuffer, 0);
 	deviceContext->PSSetConstantBuffers(0, 1, &lightBuffer);
 
@@ -157,25 +158,21 @@ void ManipulationShader::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	TimeBufferType* timePtr;
 	deviceContext->Map(timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 	timePtr = (TimeBufferType*)mappedResource.pData;
-	float timeTracked = timer;
-	timePtr->time = timeTracked;
-	timePtr->amplitude = ampli;
-	timePtr->frequency = freq;
+	timePtr->time = timer;
 	timePtr->speed = spe;
-	//timePtr->padding = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	timePtr->padding = XMFLOAT2(1.f, 1.f);
 	deviceContext->Unmap(timeBuffer, 0);
 	deviceContext->VSSetConstantBuffers(1, 1, &timeBuffer);
 
-	////Send time data to shader
-	//SineBufferType* sinePtr;
-	//deviceContext->Map(timeBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	//sinePtr = (SineBufferType*)mappedResource.pData;
-	//sinePtr->amplitude = 2.f;
-	//sinePtr->frequency = 60.f;
-	//sinePtr->speed = 2.f;
-	//sinePtr->padding = 0.0f;
-	//deviceContext->Unmap(sineBuffer, 0);
-	//deviceContext->VSSetConstantBuffers(2, 1, &sineBuffer);
+	//Send wave data to shader
+	WaveBufferType* wavePtr;
+	deviceContext->Map(waveBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	wavePtr = (WaveBufferType*)mappedResource.pData;
+	wavePtr->wave1 = _wave1;
+	wavePtr->wave2 = _wave2;
+	wavePtr->wave3 = _wave3;
+	deviceContext->Unmap(waveBuffer, 0);
+	deviceContext->VSSetConstantBuffers(2, 1, &waveBuffer);
 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);

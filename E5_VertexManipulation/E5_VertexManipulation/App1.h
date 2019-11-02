@@ -5,7 +5,7 @@
 // Includes
 #include "DXF.h"	// include dxframework
 #include "ManipulationShader.h"
-
+#include "TestSphere.h"
 
 class App1 : public BaseApplication
 {
@@ -25,11 +25,22 @@ private:
 	ManipulationShader* shader;
 	PlaneMesh* mesh;
 	Light* light;
-	float timeTracked;
+	SphereMesh* testSphereMesh;
+	TestSphere* testSphere;
 
-	float amplitude;
+
+	float timeTracked;
+	float steepness1;
+	float steepness2;
+	float steepness3;
 	float frequency;
 	float speed;
+	float wavelength1;
+	float wavelength2;
+	float wavelength3;
+	XMFLOAT4 wave1;
+	XMFLOAT4 wave2;
+	XMFLOAT4 wave3;
 };
 
 #endif

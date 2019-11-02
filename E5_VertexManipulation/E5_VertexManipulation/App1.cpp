@@ -6,6 +6,8 @@ App1::App1()
 {
 	mesh = nullptr;
 	shader = nullptr;
+	testSphereMesh = nullptr;
+	testSphere = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in, bool VSYNC, bool FULL_SCREEN)
@@ -18,15 +20,33 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Create Mesh object and shader object
 	mesh = new PlaneMesh(renderer->getDevice(), renderer->getDeviceContext());
 	shader = new ManipulationShader(renderer->getDevice(), hwnd);
+
+	testSphereMesh = new SphereMesh(renderer->getDevice(), renderer->getDeviceContext());
+	testSphere = new TestSphere(renderer->getDevice(), hwnd);
+
 	light = new Light;
 	light->setAmbientColour(0.8f, 0.8f, 0.8f, 1.0f);
 	light->setDiffuseColour(1.0f, 1.0f, 1.0f, 1.0f);
 	light->setDirection(0.7f, -0.7f, 0.0f);
+	light->setSpecularColour(1.f, 1.f, 1.f, 1.f);
+	light->setSpecularPower(10.f);
+
+	
+
+	steepness1 = 0.15f;
+	steepness2 = 0.15f;
+	steepness3 = 0.15f;
+
+	frequency = 0.7f;
+	speed = 0.5f;
+
+	wavelength1 = 60.f;
+	wavelength2= 31.f;
+	wavelength3 = 18.f;
+
+	
 
 
-	amplitude = 1.0f;
-	frequency = 1.0f;
-	speed = 1.0f;
 }
 
 
@@ -46,6 +66,18 @@ App1::~App1()
 	{
 		delete shader;
 		shader = 0;
+	}
+
+	if (testSphere)
+	{
+		delete testSphere;
+		testSphere = 0;
+	}
+
+	if (testSphereMesh)
+	{
+		delete testSphereMesh;
+		testSphereMesh = 0;
 	}
 }
 
@@ -87,9 +119,25 @@ bool App1::render()
 	projectionMatrix = renderer->getProjectionMatrix();
 
 	// Send geometry data, set shader parameters, render object with shader
+
+
+	wave1 = XMFLOAT4(1, 0, steepness1, wavelength1);
+	wave2 = XMFLOAT4(0, 1, steepness2, wavelength2);
+	wave3 = XMFLOAT4(1, 1, steepness3, wavelength3);
+
 	mesh->sendData(renderer->getDeviceContext());
-	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"DefaultDiffuse"), light, timeTracked, amplitude, frequency, speed);
+	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"DefaultDiffuse"), light, timeTracked, wave1, wave2, wave3, speed);
 	shader->render(renderer->getDeviceContext(), mesh->getIndexCount());
+
+
+
+	//XMMATRIX testSphereMatrix = worldMatrix;
+	//testSphereMatrix *= XMMatrixTranslation(0.f, 5.f, 0.f);
+
+	//testSphereMesh->sendData(renderer->getDeviceContext());
+	//testSphere->setShaderParameters(renderer->getDeviceContext(), testSphereMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"DefaultDiffuse"), light);
+	//testSphere->render(renderer->getDeviceContext(), testSphereMesh->getIndexCount());
+
 
 	// Render GUI
 	gui();
@@ -110,9 +158,12 @@ void App1::gui()
 	// Build UI
 	ImGui::Text("FPS: %.2f", timer->getFPS());
 	ImGui::Checkbox("Wireframe mode", &wireframeToggle);
-	ImGui::SliderFloat("Wave Amplitude", &amplitude, 0.1f, 5);
-	ImGui::SliderFloat("Wave Frequency", &frequency, 0.1f, 5);
-	ImGui::SliderFloat("Wave Speed", &speed, 0.1f, 20);
+	ImGui::SliderFloat("Wavelength1", &wavelength1, 0.1f, 50);
+	ImGui::SliderFloat("Wavelength2", &wavelength2, 0.1f, 50);
+	ImGui::SliderFloat("Wavelength3", &wavelength3, 0.1f, 50);
+	ImGui::SliderFloat("Steepness1", &steepness1, 0.1f, 50);
+	ImGui::SliderFloat("Steepness2", &steepness2, 0.1f, 50);
+	ImGui::SliderFloat("Steepness3", &steepness3, 0.1f, 50);
 
 	// Render UI
 	ImGui::Render();
