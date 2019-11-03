@@ -6,7 +6,6 @@
 QuadMesh::QuadMesh(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 {
 	initBuffers(device);
-
 }
 
 // Release resources.
@@ -15,6 +14,9 @@ QuadMesh::~QuadMesh()
 	// Run parent deconstructor
 	BaseMesh::~BaseMesh();
 }
+
+
+
 
 // Build quad mesh.
 void QuadMesh::initBuffers(ID3D11Device* device)
@@ -91,4 +93,3 @@ void QuadMesh::initBuffers(ID3D11Device* device)
 	delete[] indices;
 	indices = 0;
 }
-

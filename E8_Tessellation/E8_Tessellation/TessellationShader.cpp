@@ -26,6 +26,13 @@ TessellationShader::~TessellationShader()
 		layout = 0;
 	}
 	
+	if (tessellationBuffer)
+	{
+		tessellationBuffer->Release();
+		tessellationBuffer = 0;
+	}
+
+
 	//Release base shader components
 	BaseShader::~BaseShader();
 }
@@ -50,6 +57,16 @@ void TessellationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 	renderer->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
 	
+
+	D3D11_BUFFER_DESC tessBufferDesc;
+	tessBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	tessBufferDesc.ByteWidth = sizeof(TessellationBufferType);
+	tessBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	tessBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	tessBufferDesc.MiscFlags = 0;
+	tessBufferDesc.StructureByteStride = 0;
+
+	renderer->CreateBuffer(&tessBufferDesc, NULL, &tessellationBuffer);
 }
 
 void TessellationShader::initShader(const wchar_t* vsFilename, const wchar_t* hsFilename, const wchar_t* dsFilename, const wchar_t* psFilename)
@@ -63,7 +80,7 @@ void TessellationShader::initShader(const wchar_t* vsFilename, const wchar_t* hs
 }
 
 
-void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix)
+void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, int tessFactor0, int tessFactor1, int tessFactor2, int tessFactor3, int tessFactorInside0, int tessFactorInside1)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -81,6 +98,20 @@ void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	dataPtr->projection = tproj;
 	deviceContext->Unmap(matrixBuffer, 0);
 	deviceContext->DSSetConstantBuffers(0, 1, &matrixBuffer);
+
+	// Lock the constant buffer so it can be written to.
+	result = deviceContext->Map(tessellationBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	TessellationBufferType* tessPtr = (TessellationBufferType*)mappedResource.pData;
+	tessPtr->tessellationFactor0 = tessFactor0;
+	tessPtr->tessellationFactor1 = tessFactor1;
+	tessPtr->tessellationFactor2 = tessFactor2;
+	tessPtr->tessellationFactor3 = tessFactor3;
+	tessPtr->tessellationFactorInside0 = tessFactorInside0;
+	tessPtr->tessellationFactorInside1 = tessFactorInside1;
+	tessPtr->padding = XMFLOAT2(0.f, 0.f);
+	deviceContext->Unmap(tessellationBuffer, 0);
+	deviceContext->HSSetConstantBuffers(0, 1, &tessellationBuffer);
+
 }
 
 

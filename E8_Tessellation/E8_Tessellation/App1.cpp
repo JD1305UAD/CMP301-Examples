@@ -13,8 +13,15 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in, VSYNC, FULL_SCREEN);
 
 	// Create Mesh object and shader object
-	mesh = new TessellationMesh(renderer->getDevice(), renderer->getDeviceContext());
+	mesh = new QuadTess(renderer->getDevice(), renderer->getDeviceContext());
 	shader = new TessellationShader(renderer->getDevice(), hwnd);
+
+	tessellationFactor0 = 4;
+	tessellationFactor1 = 4;
+	tessellationFactor2 = 4;
+	tessellationFactor3 = 4;
+	tessellationFactorInside0 = 4;
+	tessellationFactorInside1 = 4;
 }
 
 
@@ -64,8 +71,8 @@ bool App1::render()
 	projectionMatrix = renderer->getProjectionMatrix();
 
 	// Send geometry data, set shader parameters, render object with shader
-	mesh->sendData(renderer->getDeviceContext());
-	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
+	mesh->sendData(renderer->getDeviceContext(), D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
+	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2, tessellationFactor3, tessellationFactorInside0, tessellationFactorInside1);
 	shader->render(renderer->getDeviceContext(), mesh->getIndexCount());
 
 	// Render GUI
@@ -87,8 +94,13 @@ void App1::gui()
 	// Build UI
 	ImGui::Text("FPS: %.2f", timer->getFPS());
 	ImGui::Checkbox("Wireframe mode", &wireframeToggle);
+	ImGui::SliderInt("Tesselation factor 0", &tessellationFactor0, 1, 64);
+	ImGui::SliderInt("Tesselation factor 1", &tessellationFactor1, 1, 64);
+	ImGui::SliderInt("Tesselation factor 2", &tessellationFactor2, 1, 64);
+	ImGui::SliderInt("Tesselation factor 3", &tessellationFactor3, 1, 64);
+	ImGui::SliderInt("Tesselation factor Inside 0", &tessellationFactorInside0, 1, 64);
+	ImGui::SliderInt("Tesselation factor Inside 1", &tessellationFactorInside1, 1, 64);
 
-	// Render UI
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
