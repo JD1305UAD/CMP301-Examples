@@ -28,10 +28,20 @@ private:
 	TextureShader* textureShader;
 	PlaneMesh* mesh;
 
+
+
 	Light* light;
 	Model* model;
 	ShadowShader* shadowShader;
 	DepthShader* depthShader;
+
+	CubeMesh* cubeMesh;
+	SphereMesh* sphereMesh;
+	OrthoMesh* orthoMesh;
+
+	float shadomMapBias;
+
+	float rotation;
 
 	ShadowMap* shadowMap;
 };

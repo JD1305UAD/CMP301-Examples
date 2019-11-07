@@ -31,6 +31,12 @@ ShadowShader::~ShadowShader()
 		lightBuffer = 0;
 	}
 
+	if (shadowBuffer)
+	{
+		shadowBuffer->Release();
+		shadowBuffer = 0;
+	}
+
 	//Release base shader components
 	BaseShader::~BaseShader();
 }
@@ -41,6 +47,7 @@ void ShadowShader::initShader(const wchar_t* vsFilename, const wchar_t* psFilena
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC lightBufferDesc;
+	D3D11_BUFFER_DESC shadowBufferDesc;
 
 	// Load (+ compile) shader files
 	loadVertexShader(vsFilename);
@@ -91,15 +98,24 @@ void ShadowShader::initShader(const wchar_t* vsFilename, const wchar_t* psFilena
 	lightBufferDesc.StructureByteStride = 0;
 	renderer->CreateBuffer(&lightBufferDesc, NULL, &lightBuffer);
 
+	shadowBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	shadowBufferDesc.ByteWidth = sizeof(LightBufferType);
+	shadowBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	shadowBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	shadowBufferDesc.MiscFlags = 0;
+	shadowBufferDesc.StructureByteStride = 0;
+	renderer->CreateBuffer(&shadowBufferDesc, NULL, &shadowBuffer);
+
 }
 
 
-void ShadowShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap, Light* light)
+void ShadowShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, ID3D11ShaderResourceView* texture, ID3D11ShaderResourceView*depthMap, Light* light, float bias)
 {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	MatrixBufferType* dataPtr;
 	LightBufferType* lightPtr;
-	
+	ShadowBufferType* shadowPtr;
+
 	// Transpose the matrices to prepare them for the shader.
 	XMMATRIX tworld = XMMatrixTranspose(worldMatrix);
 	XMMATRIX tview = XMMatrixTranspose(viewMatrix);
@@ -128,6 +144,13 @@ void ShadowShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const
 	lightPtr->padding = 0.f;
 	deviceContext->Unmap(lightBuffer, 0);
 	deviceContext->PSSetConstantBuffers(0, 1, &lightBuffer);
+
+	deviceContext->Map(shadowBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	shadowPtr = (ShadowBufferType*)mappedResource.pData;
+	shadowPtr->shadowMapBias = bias;
+	shadowPtr->padding = XMFLOAT3(0.f, 0.f, 0.f);
+	deviceContext->Unmap(shadowBuffer, 0);
+	deviceContext->PSSetConstantBuffers(1, 1, &shadowBuffer);
 
 	// Set shader texture resource in the pixel shader.
 	deviceContext->PSSetShaderResources(0, 1, &texture);
