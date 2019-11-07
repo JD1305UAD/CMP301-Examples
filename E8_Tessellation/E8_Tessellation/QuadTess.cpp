@@ -58,12 +58,10 @@ void QuadTess::initBuffers(ID3D11Device* device)
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
-	indices[1] = 2;  // Top right.
-	indices[2] = 1;  // Top left.
-
-	indices[3] = 0;	// bottom left
-	indices[4] = 3;	// bottom right
-	indices[5] = 2;	// top right
+	indices[1] = 1;  // Top right.
+	indices[2] = 2;  // Top left.
+	indices[3] = 3;	// bottom right
+	
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
