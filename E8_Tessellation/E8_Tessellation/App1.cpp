@@ -16,6 +16,10 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	mesh = new QuadTess(renderer->getDevice(), renderer->getDeviceContext());
 	shader = new TessellationShader(renderer->getDevice(), hwnd);
 
+
+	textureMgr->loadTexture(L"woodTex", L"res/WoodColour.jpg");
+	textureMgr->loadTexture(L"woodDis", L"res/WoodDis.png");
+
 	tessellationFactor0 = 4;
 	tessellationFactor1 = 4;
 	tessellationFactor2 = 4;
@@ -72,7 +76,7 @@ bool App1::render()
 
 	// Send geometry data, set shader parameters, render object with shader
 	mesh->sendData(renderer->getDeviceContext(), D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
-	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2, tessellationFactor3, tessellationFactorInside0, tessellationFactorInside1);
+	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2, tessellationFactor3, tessellationFactorInside0, tessellationFactorInside1, textureMgr->getTexture(L"woodTex"), textureMgr->getTexture(L"woodDis"));
 	shader->render(renderer->getDeviceContext(), mesh->getIndexCount());
 
 	// Render GUI

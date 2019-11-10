@@ -15,6 +15,20 @@ TessellationShader::~TessellationShader()
 		sampleState->Release();
 		sampleState = 0;
 	}
+
+	// Release the sampler states.
+	if (sampleStateColour)
+	{
+		sampleStateColour->Release();
+		sampleStateColour = 0;
+	}
+
+	if (sampleStateDis)
+	{
+		sampleStateDis->Release();
+		sampleStateDis = 0;
+	}
+
 	if (matrixBuffer)
 	{
 		matrixBuffer->Release();
@@ -56,7 +70,19 @@ void TessellationShader::initShader(const wchar_t* vsFilename, const wchar_t* ps
 
 	renderer->CreateBuffer(&matrixBufferDesc, NULL, &matrixBuffer);
 
-	
+	D3D11_SAMPLER_DESC samplerDesc;
+	// Create a texture sampler state description.
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	renderer->CreateSamplerState(&samplerDesc, &sampleStateColour);
+	renderer->CreateSamplerState(&samplerDesc, &sampleStateDis);
 
 	D3D11_BUFFER_DESC tessBufferDesc;
 	tessBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -80,7 +106,7 @@ void TessellationShader::initShader(const wchar_t* vsFilename, const wchar_t* hs
 }
 
 
-void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, int tessFactor0, int tessFactor1, int tessFactor2, int tessFactor3, int tessFactorInside0, int tessFactorInside1)
+void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &worldMatrix, const XMMATRIX &viewMatrix, const XMMATRIX &projectionMatrix, int tessFactor0, int tessFactor1, int tessFactor2, int tessFactor3, int tessFactorInside0, int tessFactorInside1, ID3D11ShaderResourceView* textureColour, ID3D11ShaderResourceView* textureDis)
 {
 	HRESULT result;
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -112,6 +138,10 @@ void TessellationShader::setShaderParameters(ID3D11DeviceContext* deviceContext,
 	deviceContext->Unmap(tessellationBuffer, 0);
 	deviceContext->HSSetConstantBuffers(0, 1, &tessellationBuffer);
 
+	deviceContext->PSSetShaderResources(0, 1, &textureColour);
+	deviceContext->VSSetShaderResources(0, 1, &textureDis);
+	deviceContext->PSSetSamplers(0, 1, &sampleStateColour);
+	deviceContext->VSSetSamplers(0, 1, &sampleStateDis);
 }
 
 

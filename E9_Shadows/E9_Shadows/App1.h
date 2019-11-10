@@ -32,6 +32,7 @@ private:
 
 	Light* light;
 	Model* model;
+	Model* stand;
 	ShadowShader* shadowShader;
 	DepthShader* depthShader;
 

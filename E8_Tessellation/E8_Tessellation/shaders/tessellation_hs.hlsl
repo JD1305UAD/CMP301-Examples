@@ -14,7 +14,7 @@ cbuffer tessBuffer : register(b0)
 struct InputType
 {
     float3 position : POSITION;
-    float4 colour : COLOR;
+	float2 tex : TEXCOORD0;
 };
 
 struct ConstantOutputType
@@ -27,6 +27,7 @@ struct OutputType
 {
     float3 position : POSITION;
     float4 colour : COLOR;
+	float2 tex : TEXCOORD0;
 };
 
 ConstantOutputType PatchConstantFunction(InputPatch<InputType, 4> inputPatch, uint patchId : SV_PrimitiveID)
@@ -36,13 +37,13 @@ ConstantOutputType PatchConstantFunction(InputPatch<InputType, 4> inputPatch, ui
 
     // Set the tessellation factors for the three edges of the triangle.
 	output.edges[0] = tessFactor0;
-	output.edges[1] = tessFactor1;
-	output.edges[2] = tessFactor2;
-	output.edges[3] = tessFactor3;
+	output.edges[1] = tessFactor0;
+	output.edges[2] = tessFactor0;
+	output.edges[3] = tessFactor0;
 
     // Set the tessellation factor for tessallating inside the triangle.
-	output.inside[0] = tessFactorInside0;
-	output.inside[1] = tessFactorInside1;
+	output.inside[0] = tessFactor0;
+	output.inside[1] = tessFactor0;
 
     return output;
 }
@@ -62,7 +63,7 @@ OutputType main(InputPatch<InputType, 4> patch, uint pointId : SV_OutputControlP
     output.position = patch[pointId].position;
 
     // Set the input colour as the output colour.
-    output.colour = patch[pointId].colour;
-
+   // output.colour = patch[pointId].colour;
+	output.tex = patch[pointId].tex;
     return output;
 }

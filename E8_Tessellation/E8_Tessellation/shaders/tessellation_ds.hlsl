@@ -18,12 +18,14 @@ struct InputType
 {
     float3 position : POSITION;
     float4 colour : COLOR;
+	float2 tex : TEXCOORD0;
 };
 
 struct OutputType
 {
     float4 position : SV_POSITION;
-    float4 colour : COLOR;
+ //   float4 colour : COLOR;
+	float2 tex : TEXCORRD0;
 };
 
 [domain("quad")]
@@ -38,6 +40,10 @@ OutputType main(ConstantOutputType input, float2 uvwCoord : SV_DomainLocation, c
 	vertexPosition = lerp(v1, v2, uvwCoord.x);
 
 
+	float2 t1 = lerp(patch[0].tex, patch[1].tex, uvwCoord.y);
+	float2 t2 = lerp(patch[3].tex, patch[2].tex, uvwCoord.y);
+	float2 texPosition = lerp(t1, t2, uvwCoord.x);
+
     // Determine the position of the new vertex.
 	// Invert the y and Z components of uvwCoord as these coords are generated in UV space and therefore y is positive downward.
 	// Alternatively you can set the output topology of the hull shader to cw instead of ccw (or vice versa).
@@ -49,8 +55,8 @@ OutputType main(ConstantOutputType input, float2 uvwCoord : SV_DomainLocation, c
     output.position = mul(output.position, projectionMatrix);
 
     // Send the input color into the pixel shader.
-    output.colour = patch[0].colour;
-
+    //output.colour = patch[0].colour;
+	output.tex = texPosition;
     return output;
 
 
