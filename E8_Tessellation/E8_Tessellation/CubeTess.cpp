@@ -81,53 +81,53 @@ void CubeTess::initBuffers(ID3D11Device* device)
 	//back face
 
 			// Load the vertex array with data.
-			vertices[0].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
-			vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-			vertices[0].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+			vertices[4].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
+			vertices[4].texture = XMFLOAT2(0.0f, 1.0f);
+			vertices[4].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
-			vertices[1].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Bottom left.
-			vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
-			vertices[1].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+			vertices[5].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Bottom left.
+			vertices[5].texture = XMFLOAT2(0.0f, 0.0f);
+			vertices[5].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
-			vertices[2].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Bottom right.
-			vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-			vertices[2].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+			vertices[6].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Bottom right.
+			vertices[6].texture = XMFLOAT2(1.0f, 1.0f);
+			vertices[6].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
-			vertices[3].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
-			vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-			vertices[3].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
+			vertices[7].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
+			vertices[7].texture = XMFLOAT2(1.0f, 0.0f);
+			vertices[7].normal = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 			// Load the index array with data.
-			indices[4] = 0;  // Bottom left.
-			indices[5] = 1;  // Top right.
-			indices[6] = 2;  // Top left.
-			indices[7] = 3;	// bottom right
+			indices[4] = 4;  // Bottom left.
+			indices[5] = 7;  // Top right.
+			indices[6] = 6;  // Top left.
+			indices[7] = 5;	// bottom right
 
 	//right face
 
 			// Load the vertex array with data.
-			vertices[0].position = XMFLOAT3(1.0f, 1.0f, 0.0f);  // Top left
-			vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-			vertices[0].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+			vertices[8].position = XMFLOAT3(1.0f, 1.0f, 0.0f);  // Top left
+			vertices[8].texture = XMFLOAT2(0.0f, 1.0f);
+			vertices[8].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
-			vertices[1].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom left.
-			vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
-			vertices[1].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+			vertices[9].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom left.
+			vertices[9].texture = XMFLOAT2(0.0f, 0.0f);
+			vertices[9].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
-			vertices[2].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Bottom right.
-			vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-			vertices[2].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+			vertices[10].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Bottom right.
+			vertices[10].texture = XMFLOAT2(1.0f, 1.0f);
+			vertices[10].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
-			vertices[3].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
-			vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-			vertices[3].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
+			vertices[11].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
+			vertices[11].texture = XMFLOAT2(1.0f, 0.0f);
+			vertices[11].normal = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 
 			// Load the index array with data.
-			indices[8] = 0;  // Bottom left.
-			indices[9] = 1;  // Top right.
-			indices[10] = 2;  // Top left.
-			indices[11] = 3;	// bottom right
+			indices[8] = 8;  // Bottom left.
+			indices[9] = 9;  // Top right.
+			indices[10] = 10;  // Top left.
+			indices[11] = 11;	// bottom right
 			
 
 		
@@ -137,85 +137,85 @@ void CubeTess::initBuffers(ID3D11Device* device)
 			// Load the vertex array with data.
 			
 				// Load the vertex array with data.
-			vertices[0].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
-			vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-			vertices[0].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+			vertices[12].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
+			vertices[12].texture = XMFLOAT2(0.0f, 1.0f);
+			vertices[12].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
-			vertices[1].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Bottom left.
-			vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
-			vertices[1].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+			vertices[13].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Bottom left.
+			vertices[13].texture = XMFLOAT2(0.0f, 0.0f);
+			vertices[13].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
-			vertices[2].position = XMFLOAT3(-1.0f, -1.0f, -1.0f);  // Bottom right.
-			vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-			vertices[2].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+			vertices[14].position = XMFLOAT3(-1.0f, -1.0f, -1.0f);  // Bottom right.
+			vertices[14].texture = XMFLOAT2(1.0f, 1.0f);
+			vertices[14].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
-			vertices[3].position = XMFLOAT3(-1.0f, 1.0f, -1.0f);  // Top right.
-			vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-			vertices[3].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+			vertices[15].position = XMFLOAT3(-1.0f, 1.0f, -1.0f);  // Top right.
+			vertices[15].texture = XMFLOAT2(1.0f, 0.0f);
+			vertices[15].normal = XMFLOAT3(-1.0f, 0.0f, 0.0f);
 
 
 
 			// Load the index array with data.
-			indices[12] = 0;  // Bottom left.
-			indices[13] = 1;  // Top right.
-			indices[14] = 2;  // Top left.
-			indices[15] = 3;	// bottom right
+			indices[12] = 12;  // Bottom left.
+			indices[13] = 13;  // Top right.
+			indices[14] = 14;  // Top left.
+			indices[15] = 15;	// bottom right
 			
 
 	//top face
 	
 			// Load the vertex array with data.
 			// Load the vertex array with data.
-			vertices[0].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
-			vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-			vertices[0].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+			vertices[16].position = XMFLOAT3(-1.0f, 1.0f, 1.0f);  // Top left
+			vertices[16].texture = XMFLOAT2(0.0f, 1.0f);
+			vertices[16].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-			vertices[1].position = XMFLOAT3(-1.0f, 1.0f, -1.0f);  // Bottom left.
-			vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
-			vertices[1].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+			vertices[17].position = XMFLOAT3(-1.0f, 1.0f, -1.0f);  // Bottom left.
+			vertices[17].texture = XMFLOAT2(0.0f, 0.0f);
+			vertices[17].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+					  
+			vertices[18].position = XMFLOAT3(1.0f, 1.0f, -1.0f);  // Bottom right.
+			vertices[18].texture = XMFLOAT2(1.0f, 1.0f);
+			vertices[18].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
-			vertices[2].position = XMFLOAT3(1.0f, 1.0f, -1.0f);  // Bottom right.
-			vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-			vertices[2].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-
-			vertices[3].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
-			vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-			vertices[3].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+			vertices[19].position = XMFLOAT3(1.0f, 1.0f, 1.0f);  // Top right.
+			vertices[19].texture = XMFLOAT2(1.0f, 0.0f);
+			vertices[19].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 
 
 			// Load the index array with data.
-			indices[16] = 0;  // Bottom left.
-			indices[17] = 1;  // Top right.
-			indices[18] = 2;  // Top left.
-			indices[19] = 3;	// bottom right
+			indices[16] = 16;  // Bottom left.
+			indices[17] = 17;  // Top right.
+			indices[18] = 18;  // Top left.
+			indices[19] = 19;	// bottom right
 
 	//bottom face
 
 			// Load the vertex array with data.
-			vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Top left
-			vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-			vertices[0].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+			vertices[20].position = XMFLOAT3(-1.0f, -1.0f, 1.0f);  // Top left
+			vertices[20].texture = XMFLOAT2(0.0f, 1.0f);
+			vertices[20].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
-			vertices[1].position = XMFLOAT3(-1.0f, -1.0f, -1.0f);  // Bottom left.
-			vertices[1].texture = XMFLOAT2(0.0f, 0.0f);
-			vertices[1].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+			vertices[21].position = XMFLOAT3(-1.0f, -1.0f, -1.0f);  // Bottom left.
+			vertices[21].texture = XMFLOAT2(0.0f, 0.0f);
+			vertices[21].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
-			vertices[2].position = XMFLOAT3(1.0f, -1.0f, -1.0f);  // Bottom right.
-			vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-			vertices[2].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+			vertices[22].position = XMFLOAT3(1.0f, -1.0f, -1.0f);  // Bottom right.
+			vertices[22].texture = XMFLOAT2(1.0f, 1.0f);
+			vertices[22].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
-			vertices[3].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Top right.
-			vertices[3].texture = XMFLOAT2(1.0f, 0.0f);
-			vertices[3].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
+			vertices[23].position = XMFLOAT3(1.0f, -1.0f, 1.0f);  // Top right.
+			vertices[23].texture = XMFLOAT2(1.0f, 0.0f);
+			vertices[23].normal = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 
 
 			// Load the index array with data.
-			indices[20] = 0;  // Bottom left.
-			indices[21] = 1;  // Top right.
-			indices[22] = 2;  // Top left.
-			indices[23] = 3;	// bottom right
+			indices[20] = 20;  // Bottom left.
+			indices[21] = 21;  // Top right.
+			indices[22] = 22;  // Top left.
+			indices[23] = 23;	// bottom right
 
 
 	// Set up the description of the static vertex buffer.

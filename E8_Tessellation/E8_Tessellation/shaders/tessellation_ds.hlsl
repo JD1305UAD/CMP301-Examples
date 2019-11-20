@@ -62,7 +62,7 @@ OutputType main(ConstantOutputType input, float2 uvwCoord : SV_DomainLocation, c
 	vertexPosition = lerp(v1, v2, uvwCoord.x);
 
 	float4 offset = displacementTex.SampleLevel(heightSampler0, texPosition, 0);
-	vertexPosition.z -= offset.x * 0.05f;
+	//vertexPosition.z -= offset.x * 0.05f;
 
 
 
