@@ -72,9 +72,9 @@ void CubeTess::initBuffers(ID3D11Device* device)
 			vertices[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
 
 			// Load the index array with data.
-			indices[0] = 0;  // Bottom left.
-			indices[1] = 1;  // Top right.
-			indices[2] = 2;  // Top left.
+			indices[0] = 0;  // Top left
+			indices[1] = 1;  // Bottom left
+			indices[2] = 2;  // Bottom right.
 			indices[3] = 3;	// bottom right
 
 
