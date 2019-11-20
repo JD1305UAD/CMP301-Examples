@@ -7,6 +7,7 @@
 #include "TessellationShader.h"
 #include "QuadTess.h"
 #include "TestSphere.h"
+#include "CubeTess.h"
 
 class App1 : public BaseApplication
 {
@@ -26,6 +27,7 @@ private:
 	//TessellationMesh* mesh;
 	TessellationShader* shader;
 	QuadTess* mesh;
+	CubeTess* cubeMesh;
 	SphereMesh* testSphereMesh;
 	TestSphere* testSphere;
 

@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App1.cpp" />
+    <ClCompile Include="CubeTess.cpp" />
     <ClCompile Include="DockShader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="QuadTess.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App1.h" />
+    <ClInclude Include="CubeTess.h" />
     <ClInclude Include="DockShader.h" />
     <ClInclude Include="QuadTess.h" />
     <ClInclude Include="TessellationShader.h" />
