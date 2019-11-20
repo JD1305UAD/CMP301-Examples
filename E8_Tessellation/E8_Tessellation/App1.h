@@ -6,6 +6,7 @@
 #include "DXF.h"	// include dxframework
 #include "TessellationShader.h"
 #include "QuadTess.h"
+#include "TestSphere.h"
 
 class App1 : public BaseApplication
 {
@@ -25,6 +26,14 @@ private:
 	//TessellationMesh* mesh;
 	TessellationShader* shader;
 	QuadTess* mesh;
+	SphereMesh* testSphereMesh;
+	TestSphere* testSphere;
+
+	Light* light;
+
+	float lightPosX;
+	float lightPosY;
+	float lightPosZ;
 
 	int tessellationFactor0;
 	int tessellationFactor1;

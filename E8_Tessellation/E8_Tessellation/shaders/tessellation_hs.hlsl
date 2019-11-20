@@ -26,7 +26,6 @@ struct ConstantOutputType
 struct OutputType
 {
     float3 position : POSITION;
-    float4 colour : COLOR;
 	float2 tex : TEXCOORD0;
 };
 

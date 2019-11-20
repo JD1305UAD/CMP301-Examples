@@ -23,6 +23,24 @@ private:
 		XMFLOAT2 padding;
 	};
 
+	struct LightBufferType
+	{
+		XMFLOAT4 ambient;
+		XMFLOAT4 diffuse;
+		XMFLOAT4 specular;
+		XMFLOAT3 direction;
+		float specularPower;
+		XMFLOAT3 cameraPos;
+		float paddingL;
+	};
+
+	/*struct MatrixBufferType
+	{
+		XMMATRIX worldMatrix;
+		XMMATRIX viewMatrix;
+		XMMATRIX projMatrix;
+	};*/
+
 public:
 
 	TessellationShader(ID3D11Device* device, HWND hwnd);
@@ -30,7 +48,7 @@ public:
 
 	void setShaderParameters(ID3D11DeviceContext* deviceContext, const XMMATRIX &world, const XMMATRIX &view, const XMMATRIX &projection, int tessFactor0,
 		int tessFactor1, int tessFactor2, int tessFactor3, int tessFactorInside0, int tessFactorInside1, ID3D11ShaderResourceView* textureColour, ID3D11ShaderResourceView* textureDis,
-		ID3D11ShaderResourceView* textureNorm);
+		ID3D11ShaderResourceView* textureNorm, Light* light, XMFLOAT3 cameraPos);
 
 private:
 	void initShader(const wchar_t* vsFilename, const wchar_t* psFilename);
@@ -39,6 +57,7 @@ private:
 private:
 	ID3D11Buffer* matrixBuffer;
 	ID3D11Buffer* tessellationBuffer;
+	ID3D11Buffer* lightBuffer;
 
 	ID3D11SamplerState* sampleStateColour;
 	ID3D11SamplerState* sampleStateDis;
