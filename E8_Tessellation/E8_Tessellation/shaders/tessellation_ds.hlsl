@@ -46,15 +46,15 @@ OutputType main(ConstantOutputType input, float2 uvwCoord : SV_DomainLocation, c
     OutputType output;
 
 	float2 t1 = lerp(patch[0].tex, patch[1].tex, uvwCoord.y);
-	float2 t2 = lerp(patch[2].tex, patch[3].tex, uvwCoord.y);
+	float2 t2 = lerp(patch[3].tex, patch[2].tex, uvwCoord.y);
 	float2 texPosition = lerp(t1, t2, uvwCoord.x);
 
 	float3 n1 = lerp(patch[0].normal, patch[1].normal, uvwCoord.y);
-	float3 n2 = lerp(patch[2].normal, patch[3].normal, uvwCoord.y);
+	float3 n2 = lerp(patch[3].normal, patch[2].normal, uvwCoord.y);
 	float3 normPosition = lerp(n1, n2, uvwCoord.x);
 
 	float3 tan1 = lerp(patch[0].tangent, patch[1].tangent, uvwCoord.y);
-	float3 tan2 = lerp(patch[2].tangent, patch[3].tangent, uvwCoord.y);
+	float3 tan2 = lerp(patch[3].tangent, patch[2].tangent, uvwCoord.y);
 	float3 tangentPosition = lerp(tan1, tan2, uvwCoord.x);
 
 	float3 v1 = lerp(patch[0].position, patch[1].position, uvwCoord.y);
@@ -62,7 +62,7 @@ OutputType main(ConstantOutputType input, float2 uvwCoord : SV_DomainLocation, c
 	vertexPosition = lerp(v1, v2, uvwCoord.x);
 
 	float4 offset = displacementTex.SampleLevel(heightSampler0, texPosition, 0);
-	//vertexPosition.z -= offset.x * 0.05f;
+	vertexPosition.y += offset.x * 0.3f;
 
 
 

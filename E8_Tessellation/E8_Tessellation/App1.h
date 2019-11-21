@@ -8,6 +8,7 @@
 #include "QuadTess.h"
 #include "TestSphere.h"
 #include "CubeTess.h"
+#include "PlaneTess.h"
 
 class App1 : public BaseApplication
 {
@@ -30,6 +31,7 @@ private:
 	CubeTess* cubeMesh;
 	SphereMesh* testSphereMesh;
 	TestSphere* testSphere;
+	PlaneTess* planeMesh;
 
 	Light* light;
 

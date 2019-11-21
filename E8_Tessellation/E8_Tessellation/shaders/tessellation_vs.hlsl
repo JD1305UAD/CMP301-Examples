@@ -27,7 +27,7 @@ OutputType main(InputType input)
 	
     // Pass the input color into the hull shader.
   //  output.colour = float4(1.0, 0.0, 0.0, 1.0);
-	output.tex = input.tex;
+	output.tex = float2((input.tex.x * -2), (input.tex.y * -15));
 
 
 

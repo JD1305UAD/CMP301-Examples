@@ -13,7 +13,10 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in, VSYNC, FULL_SCREEN);
 
 	// Create Mesh object and shader object
-	cubeMesh = new CubeTess(renderer->getDevice(), renderer->getDeviceContext());
+	//cubeMesh = new CubeTess(renderer->getDevice(), renderer->getDeviceContext());
+	
+
+	planeMesh = new PlaneTess(renderer->getDevice(), renderer->getDeviceContext());
 	shader = new TessellationShader(renderer->getDevice(), hwnd);
 
 	testSphereMesh = new SphereMesh(renderer->getDevice(), renderer->getDeviceContext());
@@ -101,10 +104,13 @@ bool App1::render()
 	testSphere->render(renderer->getDeviceContext(), testSphereMesh->getIndexCount());
 
 	// Send geometry data, set shader parameters, render object with shader
-	cubeMesh->sendData(renderer->getDeviceContext(), D3D_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
-	shader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2, 
+	XMMATRIX planeMatrix = worldMatrix;
+	planeMatrix *= XMMatrixScaling(5, 1, 15);
+
+	planeMesh->sendData(renderer->getDeviceContext());
+	shader->setShaderParameters(renderer->getDeviceContext(), planeMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2,
 		tessellationFactor3, tessellationFactorInside0, tessellationFactorInside1, textureMgr->getTexture(L"woodTex"), textureMgr->getTexture(L"woodDis"), textureMgr->getTexture(L"woodNorm"), light, camera->getPosition());
-	shader->render(renderer->getDeviceContext(), cubeMesh->getIndexCount());
+	shader->render(renderer->getDeviceContext(), planeMesh->getIndexCount());
 
 	// Render GUI
 	gui();
