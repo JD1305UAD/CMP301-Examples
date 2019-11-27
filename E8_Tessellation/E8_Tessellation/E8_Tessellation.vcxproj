@@ -171,6 +171,7 @@
     <ClCompile Include="QuadTess.cpp" />
     <ClCompile Include="TessellationShader.cpp" />
     <ClCompile Include="TestSphere.cpp" />
+    <ClCompile Include="FiveSideCube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App1.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="QuadTess.h" />
     <ClInclude Include="TessellationShader.h" />
     <ClInclude Include="TestSphere.h" />
+    <ClInclude Include="FiveSideCube.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DXFramework\DXFramework.vcxproj">

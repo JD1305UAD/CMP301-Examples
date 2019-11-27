@@ -15,9 +15,9 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Create Mesh object and shader object
 	//cubeMesh = new CubeTess(renderer->getDevice(), renderer->getDeviceContext());
 	
-
-	planeMesh = new PlaneTess(renderer->getDevice(), renderer->getDeviceContext());
-	shader = new TessellationShader(renderer->getDevice(), hwnd);
+	fiveSideMesh = new FiveSideCube(renderer->getDevice(), renderer->getDeviceContext());
+	//planeMesh = new PlaneTess(renderer->getDevice(), renderer->getDeviceContext());
+	dockShader = new TestSphere(renderer->getDevice(), hwnd);
 
 	testSphereMesh = new SphereMesh(renderer->getDevice(), renderer->getDeviceContext());
 	testSphere = new TestSphere(renderer->getDevice(), hwnd);
@@ -104,13 +104,12 @@ bool App1::render()
 	testSphere->render(renderer->getDeviceContext(), testSphereMesh->getIndexCount());
 
 	// Send geometry data, set shader parameters, render object with shader
-	XMMATRIX planeMatrix = worldMatrix;
-	planeMatrix *= XMMatrixScaling(5, 1, 15);
+	//XMMATRIX planeMatrix = worldMatrix;
+	//planeMatrix *= XMMatrixScaling(5, 1, 15);
 
-	planeMesh->sendData(renderer->getDeviceContext());
-	shader->setShaderParameters(renderer->getDeviceContext(), planeMatrix, viewMatrix, projectionMatrix, tessellationFactor0, tessellationFactor1, tessellationFactor2,
-		tessellationFactor3, tessellationFactorInside0, tessellationFactorInside1, textureMgr->getTexture(L"woodTex"), textureMgr->getTexture(L"woodDis"), textureMgr->getTexture(L"woodNorm"), light, camera->getPosition());
-	shader->render(renderer->getDeviceContext(), planeMesh->getIndexCount());
+	fiveSideMesh->sendData(renderer->getDeviceContext());
+	dockShader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"woodTex"), light, camera->getPosition());
+	dockShader->render(renderer->getDeviceContext(), fiveSideMesh->getIndexCount());
 
 	// Render GUI
 	gui();

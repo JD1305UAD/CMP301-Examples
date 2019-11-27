@@ -9,6 +9,8 @@
 #include "TestSphere.h"
 #include "CubeTess.h"
 #include "PlaneTess.h"
+#include "FiveSideCube.h"
+#include "DockShader.h"
 
 class App1 : public BaseApplication
 {
@@ -32,6 +34,9 @@ private:
 	SphereMesh* testSphereMesh;
 	TestSphere* testSphere;
 	PlaneTess* planeMesh;
+
+	FiveSideCube* fiveSideMesh;
+	TestSphere* dockShader;
 
 	Light* light;
 
